@@ -42,41 +42,38 @@ namespace Mentoring.OfficeBuilder.API.Controllers
                 {
                     Id = 4,
                     Svg = $@"<rect width='10' height='10' x='50' y='400' {style}/>",
-                    Parent = 2
+                    Parent = 2,
+                    Children = new List<int>{1}
                 },
                 new OfficeItemModel
                 {
                     Id = 5,
                     Svg = $@"<rect width='10' height='10' x='50' y='800' {style}/>",
-                    Parent = 3
+                    Parent = 3,
+                    Children = new List<int>{1}
                 },
                 new OfficeItemModel
                 {
                     Id = 6,
                     Svg = $@"<rect width='10' height='10' x='700' y='20' {style}/>",
-                    Parent = 3
+                    Parent = 3,
+                    Children = new List<int>{1}
                 },
             };
         }
 
         // GET: api/Svg
         [HttpGet]
-        public OfficeItemModel GetMainSvg()
+        public async Task<OfficeItemModel> GetMainSvg()
         {
             return Models.Single(x => x.Parent == null);
         }
 
-        // GET: api/Svg/5
-        [HttpGet("{id}", Name = "Get")]
-        public List<OfficeItemModel> Get(int id)
-        {
-            return Models.Where(x => x.Parent == id).ToList();
-        }
-
         // POST: api/Svg
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<List<OfficeItemModel>> Post([FromBody] GetItemsRequest request)
         {
+            return Models.Where(x => request.Ids.Any(y => y == x.Id)).ToList();
         }
 
         // PUT: api/Svg/5

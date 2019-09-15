@@ -6,22 +6,42 @@
 
 <h1>Svg</h1>
 
-@if (MainModel == null)
+@if (Models == null)
 {
 <p><em>Loading...</em></p>
 }
-else
+else 
 {
-<Node Model=MainModel />
+<svg width="1000" height="1000">
+    @foreach (var model in Models)
+        {
+    <SvgRender Model=model OnClick=@(async () => await OnClick(model)) />
+
+        }
+</svg>
 }
 
+
 @code {
-    OfficeItemModel MainModel;
-    List<OfficeItemModel> Children;
+    [Parameter]
+    public List<OfficeItemModel> Models { get; set; }
+
+    protected async Task OnClick(OfficeItemModel model)
+    {
+        Models = await LoadModelsAsync(model.Children);
+    }
 
     protected override async Task OnInitializedAsync()
     {
-        MainModel = await Http.GetJsonAsync<OfficeItemModel>("https://localhost:44327/" + "api/Svg/GetMainSvg");
+        var mainModel = await Http.GetJsonAsync<OfficeItemModel>("https://localhost:44327/" + "api/Svg/GetMainSvg");
+
+        Models = new List<OfficeItemModel>{mainModel};
+    }
+
+    private async Task<List<OfficeItemModel>> LoadModelsAsync(List<int> ids)
+    {
+        var request = new GetItemsRequest { Ids = ids };
+        return await Http.PostJsonAsync<List<OfficeItemModel>>("https://localhost:44327/" + "api/Svg/Post", request);
     }
 }
 

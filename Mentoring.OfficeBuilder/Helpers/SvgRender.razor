@@ -1,6 +1,8 @@
 ﻿@using Mentoring.OfficeBuilder.Models;
 
+<g onclick=@OnClick>
 @GetMarkup(Model)
+</g>
 
 @code {
     [Parameter]
@@ -10,4 +12,7 @@
     {
         return (MarkupString)model.Svg;
     }
+
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnClick { get; set; }
 }
