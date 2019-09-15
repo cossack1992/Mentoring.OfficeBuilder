@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mentoring.OfficeBuilder.Mod
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mentoring.OfficeBuilder.DAL", "Mentoring.OfficeBuilder.DAL\Mentoring.OfficeBuilder.DAL.csproj", "{E16EE2A6-F39C-49E0-B086-5D47BB571683}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mentoring.OfficeBuilder.API", "Mentoring.OfficeBuilder.API\Mentoring.OfficeBuilder.API.csproj", "{70AA6D65-3E86-4073-9FE0-80EA95A19C48}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mentoring.OfficeBuilder.API", "Mentoring.OfficeBuilder.API\Mentoring.OfficeBuilder.API.csproj", "{70AA6D65-3E86-4073-9FE0-80EA95A19C48}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

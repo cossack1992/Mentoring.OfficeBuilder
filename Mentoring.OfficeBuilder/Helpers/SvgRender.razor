@@ -1,0 +1,13 @@
+﻿@using Mentoring.OfficeBuilder.Models;
+
+@GetMarkup(Model)
+
+@code {
+    [Parameter]
+    public OfficeItemModel Model { get; set; }
+
+    private MarkupString GetMarkup(OfficeItemModel model)
+    {
+        return (MarkupString)model.Svg;
+    }
+}

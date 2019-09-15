@@ -27,6 +27,19 @@ namespace Mentoring.OfficeBuilder.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddOfficeDbDbContext(Configuration);
+
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                    builder =>
+                    {
+                        builder
+                        .AllowAnyOrigin()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                    });
+            });
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
@@ -43,6 +56,7 @@ namespace Mentoring.OfficeBuilder.API
                 app.UseHsts();
             }
 
+            app.UseCors();
             app.UseHttpsRedirection();
             app.UseMvc();
         }

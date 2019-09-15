@@ -1,0 +1,27 @@
+﻿@using Mentoring.OfficeBuilder.Models;
+@using Mentoring.OfficeBuilder.Helpers;
+@page "/svg"
+
+@inject HttpClient Http
+
+<h1>Svg</h1>
+
+@if (MainModel == null)
+{
+<p><em>Loading...</em></p>
+}
+else
+{
+<Node Model=MainModel />
+}
+
+@code {
+    OfficeItemModel MainModel;
+    List<OfficeItemModel> Children;
+
+    protected override async Task OnInitializedAsync()
+    {
+        MainModel = await Http.GetJsonAsync<OfficeItemModel>("https://localhost:44327/" + "api/Svg/GetMainSvg");
+    }
+}
+
