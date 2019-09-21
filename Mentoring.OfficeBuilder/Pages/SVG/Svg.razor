@@ -1,0 +1,43 @@
+﻿@using Mentoring.OfficeBuilder.Pages.SVG
+@using Mentoring.OfficeBuilder.Helpers
+
+@page "/svg"
+
+@inherits SVGBase
+
+@if (Models == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="rTable">
+        <div class="rTableRow">
+            <div class="rTableHead"><strong>SVG</strong></div>
+            <div class="rTableHead"><span style="font-weight: bold;">Uploud</span></div>
+        </div>
+        <div class="rTableRow">
+            <div class="rTableCell">
+                <svg width="500" height="500" xmlns="http://www.w3.org/2000/svg">
+                    @foreach (var model in Models)
+                    {
+                        <SvgRender Model=model OnClick=@(async () => await OnClick(model)) />
+                    }
+                </svg>
+            </div>
+            <div class="rTableCell">
+                <input type="file" @ref=inputTypeFileElement /><button @onclick=ReadFile>Read file</button>
+                @if (UploudedSvgs != null)
+                {
+                    <svg width="500" height="500" xmlns="http://www.w3.org/2000/svg">
+                        @foreach (var model in UploudedSvgs)
+                        {
+                            <SvgRender Model=model OnClick=@(async () => await OnClick(model)) />
+                        }
+                    </svg>
+                }
+            </div>
+        </div>
+    </div>
+}
+

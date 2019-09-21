@@ -21,7 +21,7 @@ namespace Mentoring.OfficeBuilder.API.Controllers
                 new OfficeItemModel
                 {
                     Id = 1,
-                    Svg = $@"<rect width='1000' height='1000' {style}/>",
+                    Svg = $@"<rect width='100' height='100' {style}/>",
                     Children = new List<int>{2, 3}
                 },
                 new OfficeItemModel
@@ -41,21 +41,21 @@ namespace Mentoring.OfficeBuilder.API.Controllers
                 new OfficeItemModel
                 {
                     Id = 4,
-                    Svg = $@"<rect width='10' height='10' x='50' y='400' {style}/>",
+                    Svg = $@"<rect width='10' height='10' x='50' y='40' {style}/>",
                     Parent = 2,
                     Children = new List<int>{1}
                 },
                 new OfficeItemModel
                 {
                     Id = 5,
-                    Svg = $@"<rect width='10' height='10' x='50' y='800' {style}/>",
+                    Svg = $@"<rect width='10' height='10' x='50' y='80' {style}/>",
                     Parent = 3,
                     Children = new List<int>{1}
                 },
                 new OfficeItemModel
                 {
                     Id = 6,
-                    Svg = $@"<rect width='10' height='10' x='700' y='20' {style}/>",
+                    Svg = $@"<rect width='10' height='10' x='70' y='20' {style}/>",
                     Parent = 3,
                     Children = new List<int>{1}
                 },
