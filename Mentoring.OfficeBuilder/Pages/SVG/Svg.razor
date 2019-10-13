@@ -5,7 +5,7 @@
 
 @inherits SVGBase
 
-@if (Models == null)
+@if (Area == null)
 {
     <p><em>Loading...</em></p>
 }
@@ -18,15 +18,15 @@ else
         </div>
         <div class="rTableRow">
             <div class="rTableCell">
-                <svg width="500" height="500" xmlns="http://www.w3.org/2000/svg">
-                    @foreach (var model in Models)
+                <svg width=@Area.Size.Width height=@Area.Size.Height x=@Area.Position.X y=@Area.Position.Y xmlns="http://www.w3.org/2000/svg">
+                    @foreach (var model in Area.Items)
                     {
                         <SvgRender Model=model OnClick=@(async () => await OnClick(model)) />
                     }
                 </svg>
             </div>
             <div class="rTableCell">
-                <input type="file" @ref=inputTypeFileElement /><button @onclick=ReadFile>Read file</button>
+                <input type="file" @ref=inputTypeFileElement /><button @onclick=OnReadFile>Read file</button>
                 @if (UploudedSvgs != null)
                 {
                     <svg width="500" height="500" xmlns="http://www.w3.org/2000/svg">

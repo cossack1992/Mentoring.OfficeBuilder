@@ -10,8 +10,6 @@ namespace Mentoring.OfficeBuilder.Models
 
         public string Svg { get; set; }
 
-        public List<int> Children { get; set; }
-
-        public int? Parent { get; set; }
+        public int AreaToMove { get; set; }
     }
 }
