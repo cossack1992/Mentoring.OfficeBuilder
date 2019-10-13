@@ -2,9 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Mentoring.OfficeBuilder.DAL;
 using Mentoring.OfficeBuilder.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Mentoring.OfficeBuilder.API;
+using Mentoring.OfficeBuilder.DAL.Extensions;
+using Microsoft.EntityFrameworkCore;
 
 namespace Mentoring.OfficeBuilder.API.Controllers
 {
@@ -12,83 +16,30 @@ namespace Mentoring.OfficeBuilder.API.Controllers
     [ApiController]
     public class SvgController : ControllerBase
     {
-        private List<OfficeAreaModel> AreaModels;
+        private OfficeDbContext _context;
 
-        public SvgController()
+        public SvgController(OfficeDbContext context)
         {
-            AreaModels = new List<OfficeAreaModel>
-            {
-                new OfficeAreaModel
-                {
-                    Id = 1,
-                    Items = new List<OfficeItemModel>
-                    {
-                        new OfficeItemModel
-                        {
-                            Id = 2,
-                            Svg = $@"<rect width='10' height='10' x='20' y='50' {style}/>",
-                            AreaToMove = 2
-                        },
-                        new OfficeItemModel
-                        {
-                            Id = 3,
-                            Svg = $@"<rect width='10' height='10' x='50' y='20' {style}/>",
-                            AreaToMove = 3
-                        }
-                    },
-                    Position = new Position{ X = 0, Y = 0 },
-                    Size = new Size{Height = 100, Width = 100 }
-                },
-                new OfficeAreaModel
-                {
-                    Id = 2,
-                    Items = new List<OfficeItemModel>
-                    {
-                        new OfficeItemModel
-                        {
-                            Id = 4,
-                            Svg = $@"<rect width='10' height='10' x='50' y='40' {style}/>",
-                            AreaToMove = 1
-                        },
-                        new OfficeItemModel
-                        {
-                            Id = 5,
-                            Svg = $@"<rect width='10' height='10' x='50' y='80' {style}/>",
-                            AreaToMove = 3
-                        },
-                    },
-                    Position = new Position{ X = 0, Y = 0 },
-                    Size = new Size{Height = 100, Width = 100 }
-                },
-                new OfficeAreaModel
-                {
-                    Id = 3,
-                    Items = new List<OfficeItemModel>
-                    {
-                        new OfficeItemModel
-                        {
-                            Id = 6,
-                            Svg = $@"<rect width='10' height='10' x='70' y='20' {style}/>",
-                            AreaToMove = 1
-                        }
-                    },
-                    Position = new Position{ X = 0, Y = 0 },
-                    Size = new Size{Height = 100, Width = 100 }
-                }
-            };
-        }
+            _context = context;
 
-        // GET: api/Svg
-        [HttpGet]
-        public async Task<OfficeAreaModel> Get()
-        {
-            return AreaModels.Single(x => x.Id == 1);
+            _context.ApplyDefaultData();
         }
 
         [HttpGet("{id}")]
         public async Task<OfficeAreaModel> Get(int id)
         {
-            return AreaModels.Single(x => x.Id == id);
+            var dbModel = _context.DbAreas
+                .Include(x => x.Items)
+                .SingleOrDefault(x => x.Id == id);
+
+            if (dbModel == null)
+            {
+                throw new Exception();
+            }
+
+            var model = dbModel.GetAreaFromDbModel();
+
+            return model;
         }
 
         // PUT: api/Svg/5

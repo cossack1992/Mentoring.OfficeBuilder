@@ -39,7 +39,7 @@ namespace Mentoring.OfficeBuilder.Pages.SVG
 
         protected override async Task OnInitializedAsync()
         {
-            var mainModel = await Http.GetJsonAsync<OfficeAreaModel>("https://localhost:44327/" + "api/Svg");
+            var mainModel = await LoadModelsAsync(1);
 
             Area = mainModel;
         }

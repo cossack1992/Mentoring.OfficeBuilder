@@ -11,7 +11,9 @@ namespace Mentoring.OfficeBuilder.DAL.Extensions
     {
         public static IServiceCollection AddOfficeDbDbContext(this IServiceCollection services, IConfiguration configuration)
         {
-            return services.AddDbContext<OfficeDbContext>(option => option.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+            return services.AddDbContext<OfficeDbContext>(option => 
+            option.UseSqlServer(configuration.GetConnectionString("DefaultConnection"), 
+            b => b.MigrationsAssembly("Mentoring.OfficeBuilder.API")));
         }
     }
 }
