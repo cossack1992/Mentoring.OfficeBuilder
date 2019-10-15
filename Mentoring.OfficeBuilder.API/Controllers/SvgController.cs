@@ -30,6 +30,7 @@ namespace Mentoring.OfficeBuilder.API.Controllers
         {
             var dbModel = _context.DbAreas
                 .Include(x => x.Items)
+                .ThenInclude(item => item.MoveToArea)
                 .SingleOrDefault(x => x.Id == id);
 
             if (dbModel == null)
