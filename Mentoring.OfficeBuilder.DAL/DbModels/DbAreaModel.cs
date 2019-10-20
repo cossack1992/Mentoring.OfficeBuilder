@@ -22,7 +22,7 @@ namespace Mentoring.OfficeBuilder.DAL.DbModels
 
         public int Y { get; set; }
 
-        public virtual List<DbItemModel> Items { get; set; }
+        public virtual List<DbGroupModel> Groups { get; set; }
 
         public virtual List<DbItemModel> MovedFromItems { get; set; }
 

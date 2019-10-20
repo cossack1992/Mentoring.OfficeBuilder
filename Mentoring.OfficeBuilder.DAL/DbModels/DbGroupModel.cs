@@ -6,16 +6,14 @@ using System.Text;
 
 namespace Mentoring.OfficeBuilder.DAL.DbModels
 {
-    public class DbItemModel
+    public class DbGroupModel
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public int Id { get;  set; }
 
-        public string Svg { get; set; }
+        public List<DbItemModel> Items { get; set; }
 
-        public virtual DbGroupModel Group { get; set; }
-
-        public virtual DbAreaModel MoveToArea { get; set; }
+        public DbAreaModel Area { get; set; }
     }
 }

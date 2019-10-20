@@ -19,7 +19,8 @@ namespace Mentoring.OfficeBuilder.DAL
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<DbAreaModel>().HasMany(a => a.Items).WithOne(i => i.Area).IsRequired();
+            builder.Entity<DbAreaModel>().HasMany(a => a.Groups).WithOne(i => i.Area).IsRequired();
+            builder.Entity<DbGroupModel>().HasMany(a => a.Items).WithOne(i => i.Group).IsRequired();
             builder.Entity<DbAreaModel>().HasMany(a => a.MovedFromItems).WithOne(i => i.MoveToArea);
         }
     }

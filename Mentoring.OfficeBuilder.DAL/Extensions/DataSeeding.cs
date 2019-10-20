@@ -25,17 +25,26 @@ namespace Mentoring.OfficeBuilder.DAL.Extensions
             {
                 Svg = $@"<rect width='10' height='10' x='50' y='20' {style}/>"
             };
+
+            DbGroupModel groupModel1 = new DbGroupModel
+            {
+                Items = new List<DbItemModel>()
+            };
+            groupModel1.AddItem(itemModel1);
+            groupModel1.AddItem(itemModel2);
+
             var area1 = new DbAreaModel
             {
-                Items = new List<DbItemModel>(),
+                Groups = new List<DbGroupModel>(),
                 MovedFromItems = new List<DbItemModel>(),
                 X = 0,
                 Y = 0,
                 Name = "Main",
                 Width = 100,
                 Height = 100
-            }.AddItem(itemModel1).AddItem(itemModel2);
+            };
 
+            area1.AddGroup(groupModel1);
 
             DbItemModel itemModel3 = new DbItemModel
             {
@@ -45,37 +54,58 @@ namespace Mentoring.OfficeBuilder.DAL.Extensions
             {
                 Svg = $@"<rect width='10' height='10' x='50' y='80' {style}/>"
             };
+
+            DbGroupModel groupModel2 = new DbGroupModel
+            {
+                Items = new List<DbItemModel>()
+            };
+
+            groupModel2.AddItem(itemModel3);
+            groupModel2.AddItem(itemModel4);
+
             var area2 = new DbAreaModel
             {
-                Items = new List<DbItemModel>(),
+                Groups = new List<DbGroupModel>(),
                 MovedFromItems = new List<DbItemModel>(),
                 X = 0,
                 Y = 0,
                 Name = "Main",
                 Width = 100,
                 Height = 100
-            }.AddItem(itemModel3).AddItem(itemModel4);
+            };
+
+            area2.AddGroup(groupModel2);
 
             DbItemModel itemModel5 = new DbItemModel
             {
                 Svg = $@"<rect width='10' height='10' x='70' y='20' {style}/>"
             };
+
+            DbGroupModel groupModel3 = new DbGroupModel
+            {
+                Items = new List<DbItemModel>()
+            };
+
+            groupModel3.AddItem(itemModel5);
+
             var area3 = new DbAreaModel
             {
-                Items = new List<DbItemModel>(),
+                Groups = new List<DbGroupModel>(),
                 MovedFromItems = new List<DbItemModel>(),
                 X = 0,
                 Y = 0,
                 Name = "Main",
                 Width = 100,
                 Height = 100
-            }.AddItem(itemModel5);
+            };
+
+            area3.AddGroup(groupModel3);
 
             itemModel1.AddMoveToArea(area1);
             itemModel2.AddMoveToArea(area3);
             itemModel3.AddMoveToArea(area2);
             itemModel4.AddMoveToArea(area1);
-            itemModel5.AddMoveToArea(area3);
+            itemModel5.AddMoveToArea(area2);
 
             context.DbAreas.AddRange(
                 area1,

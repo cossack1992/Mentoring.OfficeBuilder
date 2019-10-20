@@ -29,9 +29,10 @@ namespace Mentoring.OfficeBuilder.API.Controllers
         public async Task<OfficeAreaModel> Get(int id)
         {
             var dbModel = _context.DbAreas
-                .Include(x => x.Items)
+                .Include(area => area.Groups)
+                .ThenInclude(group => group.Items)
                 .ThenInclude(item => item.MoveToArea)
-                .SingleOrDefault(x => x.Id == id);
+                .Single(area => area.Id == id);
 
             if (dbModel == null)
             {

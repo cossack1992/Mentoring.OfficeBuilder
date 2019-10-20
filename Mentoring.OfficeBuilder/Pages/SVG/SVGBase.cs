@@ -23,7 +23,7 @@ namespace Mentoring.OfficeBuilder.Pages.SVG
         [Parameter]
         public OfficeAreaModel Area { get; set; }
 
-        public List<OfficeItemModel> UploudedSvgs { get; set; }
+        public List<OfficeAreaModel> UploudedAreas { get; set; }
 
         public ElementReference inputTypeFileElement;
 
@@ -34,7 +34,7 @@ namespace Mentoring.OfficeBuilder.Pages.SVG
 
         protected async Task OnReadFile()
         {
-            UploudedSvgs = await uploadService.ReadFile(inputTypeFileElement);
+            UploudedAreas = await uploadService.ReadFile(inputTypeFileElement);
         }
 
         protected override async Task OnInitializedAsync()

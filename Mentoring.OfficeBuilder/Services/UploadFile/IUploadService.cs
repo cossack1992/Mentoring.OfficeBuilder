@@ -7,6 +7,6 @@ namespace Mentoring.OfficeBuilder.Services.UploadFile
 {
     public interface IUploadService
     {
-        Task<List<OfficeItemModel>> ReadFile(ElementReference elementReference);
+        Task<List<OfficeAreaModel>> ReadFile(ElementReference elementReference);
     }
 }

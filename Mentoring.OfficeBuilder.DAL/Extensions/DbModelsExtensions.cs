@@ -7,12 +7,12 @@ namespace Mentoring.OfficeBuilder.DAL.Extensions
 {
     public static class DbModelsExtensions
     {
-        public static DbAreaModel AddItem(this DbAreaModel areaModel, DbItemModel itemModel)
+        public static DbGroupModel AddItem(this DbGroupModel groupModel, DbItemModel itemModel)
         {
-            itemModel.Area = areaModel;
-            areaModel.Items.Add(itemModel);
+            itemModel.Group = groupModel;
+            groupModel.Items.Add(itemModel);
 
-            return areaModel;
+            return groupModel;
         }
 
         public static DbItemModel AddMoveToArea(this DbItemModel itemModel, DbAreaModel areaModel)
@@ -21,6 +21,14 @@ namespace Mentoring.OfficeBuilder.DAL.Extensions
             areaModel.MovedFromItems.Add(itemModel);
 
             return itemModel;
+        }
+
+        public static DbAreaModel AddGroup(this DbAreaModel area, DbGroupModel dbGroupModel)
+        {
+            dbGroupModel.Area = area;
+            area.Groups.Add(dbGroupModel);
+
+            return area;
         }
     }
 }

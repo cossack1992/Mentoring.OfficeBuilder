@@ -14,6 +14,6 @@ namespace Mentoring.OfficeBuilder.Models
 
         public Size Size { get; set; }
 
-        public List<OfficeItemModel> Items { get; set; }
+        public List<OfficeItemGroup> Groups { get; set; }
     }
 }

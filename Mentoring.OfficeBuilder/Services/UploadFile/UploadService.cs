@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,6 +8,8 @@ using System.Xml;
 using Blazor.FileReader;
 using Mentoring.OfficeBuilder.Models;
 using Microsoft.AspNetCore.Components;
+using Mentoring.OfficeBuilder.Extensions;
+using HtmlAgilityPack;
 
 namespace Mentoring.OfficeBuilder.Services.UploadFile
 {
@@ -19,7 +22,7 @@ namespace Mentoring.OfficeBuilder.Services.UploadFile
             this.fileReaderService = fileReaderService;
         }
 
-        public async Task<List<OfficeItemModel>> ReadFile(ElementReference elementReference)
+        public async Task<List<OfficeAreaModel>> ReadFile(ElementReference elementReference)
         {
             var tasks = new List<Task<string>>();
             foreach (var file in await fileReaderService.CreateReference(elementReference).EnumerateFilesAsync())
@@ -29,30 +32,56 @@ namespace Mentoring.OfficeBuilder.Services.UploadFile
 
             var allTasks = await Task.WhenAll(tasks);
 
-            var UploudedSvgs = new List<OfficeItemModel>();
+            var svgDocument = new HtmlDocument();
+
+            var uploadedAreas = new List<OfficeAreaModel>();
 
             foreach (var file in allTasks)
             {
-                var xmlDocument = new XmlDocument();
-                xmlDocument.LoadXml(file);
+                svgDocument.LoadHtml(file);
+                var documentElement = svgDocument.DocumentNode;
 
-                Console.WriteLine(xmlDocument.FirstChild.FirstChild.InnerXml);
-                XmlNodeList nodes = xmlDocument.GetElementsByTagName("g");
+                var nodes = documentElement.ChildNodes;
 
-                Console.WriteLine(nodes.Count);
-
-                foreach (XmlNode node in nodes)
+                foreach (var node in nodes)
                 {
-                    var model = new OfficeItemModel
+                    var uploadedGroups = new List<OfficeItemGroup>();
+                    foreach (var gGroup in node.ChildNodes)
                     {
-                        Svg = node.InnerXml
+                        var uploudedSvgs = new List<OfficeItemModel>();
+                        foreach (var innerNode in node.ChildNodes)
+                        {
+                            var model = new OfficeItemModel
+                            {
+                                Svg = innerNode.InnerHtml
+                            };
+
+                            uploudedSvgs.Add(model);
+                        }
+
+                        var group = new OfficeItemGroup { Items = uploudedSvgs };
+                        uploadedGroups.Add(group);
+                    }
+
+                    var (height, heightUnitRatio) = node.GetAttributeValue("height");
+                    var (width, widthUnitRatio) = node.GetAttributeValue("width");
+                    var area = new OfficeAreaModel
+                    {
+                        Size = new Size
+                        {
+                            Height = (int)Math.Round(height * heightUnitRatio, 0, MidpointRounding.AwayFromZero),
+                            Width = (int)Math.Round(width * widthUnitRatio, 0, MidpointRounding.AwayFromZero)
+                        },
+                        Groups = uploadedGroups
                     };
 
-                    UploudedSvgs.Add(model);
+
+                    uploadedAreas.Add(area);
                 }
+                
             }
 
-            return UploudedSvgs;
+            return uploadedAreas;
         }
 
         private async Task<string> ReadFile(IFileReference file)

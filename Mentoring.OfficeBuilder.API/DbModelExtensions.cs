@@ -25,11 +25,15 @@ namespace Mentoring.OfficeBuilder.API
                     Height = dbModel.Height,
                     Width = dbModel.Width
                 },
-                Items = dbModel.Items.Select(x => new OfficeItemModel 
+                Groups = dbModel.Groups.Select(x => new OfficeItemGroup
                 {
                     Id = x.Id,
-                    Svg = x.Svg,
-                    AreaToMove = x.MoveToArea.Id
+                    Items = x.Items.Select(y => new OfficeItemModel 
+                    {
+                        Id = y.Id,
+                        AreaToMove = y.MoveToArea.Id,
+                        Svg = y.Svg
+                    }).ToList()
                 }).ToList()
             };
 

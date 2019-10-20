@@ -19,25 +19,41 @@ else
         <div class="rTableRow">
             <div class="rTableCell">
                 <svg width=@Area.Size.Width height=@Area.Size.Height x=@Area.Position.X y=@Area.Position.Y xmlns="http://www.w3.org/2000/svg">
-                    @foreach (var model in Area.Items)
+                    @foreach (var group in Area.Groups)
                     {
-                        <SvgRender Model=model OnClick=@(async () => await OnClick(model)) />
+                        <g>
+                            @foreach (var model in group.Items)
+                            {
+                            <SvgRender Model=model OnClick=@(async () => await OnClick(model)) />
+                            }
+                        </g>
                     }
                 </svg>
             </div>
             <div class="rTableCell">
                 <input type="file" @ref=inputTypeFileElement /><button @onclick=OnReadFile>Read file</button>
-                @if (UploudedSvgs != null)
+                @if (UploudedAreas != null)
                 {
-                    <svg width="500" height="500" xmlns="http://www.w3.org/2000/svg">
-                        @foreach (var model in UploudedSvgs)
-                        {
-                            <SvgRender Model=model OnClick=@(async () => await OnClick(model)) />
-                        }
-                    </svg>
+                    @foreach (var area in UploudedAreas)
+                    {
+
+                        <svg width=@area.Size.Height height=@area.Size.Width xmlns="http://www.w3.org/2000/svg">
+
+                            @foreach (var group in area.Groups)
+                            {
+                                <g>
+                                    @foreach (var model in group.Items)
+                                    {
+                                    <SvgRender Model=model OnClick=@(async () => await OnClick(model)) />
+                                    }
+                                </g>
+                            }
+                        </svg>
+                    }
                 }
             </div>
         </div>
+
     </div>
 }
 
