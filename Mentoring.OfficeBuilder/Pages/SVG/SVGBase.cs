@@ -1,14 +1,12 @@
-﻿using Blazor.FileReader;
-using Mentoring.OfficeBuilder.Models;
+﻿using Mentoring.OfficeBuilder.Models;
 using Mentoring.OfficeBuilder.Services.UploadFile;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Xml;
 
 namespace Mentoring.OfficeBuilder.Pages.SVG
 {
@@ -19,34 +17,37 @@ namespace Mentoring.OfficeBuilder.Pages.SVG
 
         [Inject]
         public HttpClient Http { get; set; }
+        public List<SvgModel> Svgs { get; private set; }
 
-        [Parameter]
-        public OfficeAreaModel Area { get; set; }
-
-        public List<OfficeAreaModel> UploudedAreas { get; set; }
+        public SvgModel Svg { get; set; }
 
         public ElementReference inputTypeFileElement;
 
-        protected async Task OnClick(OfficeItemModel model)
+        protected async Task OnClick(string id)
         {
-            Area = await LoadModelsAsync(model.AreaToMove);
+            Svg = await LoadModelsAsync(id);
         }
 
         protected async Task OnReadFile()
         {
-            UploudedAreas = await uploadService.ReadFile(inputTypeFileElement);
+            Svgs = await uploadService.ReadFile(inputTypeFileElement);
         }
 
         protected override async Task OnInitializedAsync()
         {
-            var mainModel = await LoadModelsAsync(1);
+            //var mainModel = await LoadModelsAsync("Main");
 
-            Area = mainModel;
+            //Svg = mainModel;
         }
 
-        private async Task<OfficeAreaModel> LoadModelsAsync(int areaModelId)
+        private async Task<SvgModel> LoadModelsAsync(string id)
         {
-            return await Http.GetJsonAsync<OfficeAreaModel>("https://localhost:44327/" + "api/Svg/" + areaModelId);
+            return await Http.GetJsonAsync<SvgModel>("https://localhost:44327/" + "api/Svg/" + id);
+        }
+
+        public async Task SaveModelsAsync()
+        {
+            await Http.PostJsonAsync("https://localhost:44327/" + "api/Svg", Svgs);
         }
     }
 }

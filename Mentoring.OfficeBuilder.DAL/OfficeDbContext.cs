@@ -8,9 +8,7 @@ namespace Mentoring.OfficeBuilder.DAL
 {
     public class OfficeDbContext : DbContext
     {
-        public DbSet<DbItemModel> DbItems { get; set; }
-
-        public DbSet<DbAreaModel> DbAreas { get; set; }
+        public DbSet<DbSvg> DbAreas { get; set; }
 
         public OfficeDbContext(DbContextOptions<OfficeDbContext> options) : base(options) 
         {
@@ -19,9 +17,7 @@ namespace Mentoring.OfficeBuilder.DAL
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<DbAreaModel>().HasMany(a => a.Groups).WithOne(i => i.Area).IsRequired();
-            builder.Entity<DbGroupModel>().HasMany(a => a.Items).WithOne(i => i.Group).IsRequired();
-            builder.Entity<DbAreaModel>().HasMany(a => a.MovedFromItems).WithOne(i => i.MoveToArea);
+            builder.Entity<DbSvg>().HasMany(a => a.Transitions).WithOne(i => i.Svg);
         }
     }
 }

@@ -21,41 +21,32 @@ namespace Mentoring.OfficeBuilder.API.Controllers
         public SvgController(OfficeDbContext context)
         {
             _context = context;
-
-            _context.ApplyDefaultData();
         }
 
         [HttpGet("{id}")]
-        public async Task<OfficeAreaModel> Get(int id)
+        public async Task<SvgModel> Get(string id)
         {
-            var dbModel = _context.DbAreas
-                .Include(area => area.Groups)
-                .ThenInclude(group => group.Items)
-                .ThenInclude(item => item.MoveToArea)
-                .Single(area => area.Id == id);
+            var dbSvg = _context.DbAreas
+                .SingleOrDefault(svg => svg.Id == id);
 
-            if (dbModel == null)
+            if (dbSvg == null)
             {
                 throw new Exception();
             }
 
-            var model = dbModel.GetAreaFromDbModel();
+            var model = new SvgModel
+            {
+                Id = dbSvg.Id,
+                Name = dbSvg.Name,
+                Html = dbSvg.Html
+            };
 
             return model;
         }
 
-        // PUT: api/Svg/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPost()]
+        public async Task Post(List<SvgModel> svgs)
         {
         }
-
-        // DELETE: api/ApiWithActions/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
-
-        private string style = @"style='fill:white;stroke:black;stroke-width:3'";
     }
 }

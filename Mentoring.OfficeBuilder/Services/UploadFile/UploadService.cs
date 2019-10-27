@@ -10,6 +10,7 @@ using Mentoring.OfficeBuilder.Models;
 using Microsoft.AspNetCore.Components;
 using Mentoring.OfficeBuilder.Extensions;
 using HtmlAgilityPack;
+using Mentoring.OfficeBuilder.Helpers;
 
 namespace Mentoring.OfficeBuilder.Services.UploadFile
 {
@@ -22,7 +23,7 @@ namespace Mentoring.OfficeBuilder.Services.UploadFile
             this.fileReaderService = fileReaderService;
         }
 
-        public async Task<List<OfficeAreaModel>> ReadFile(ElementReference elementReference)
+        public async Task<List<SvgModel>> ReadFile(ElementReference elementReference)
         {
             var tasks = new List<Task<string>>();
             foreach (var file in await fileReaderService.CreateReference(elementReference).EnumerateFilesAsync())
@@ -32,53 +33,20 @@ namespace Mentoring.OfficeBuilder.Services.UploadFile
 
             var allTasks = await Task.WhenAll(tasks);
 
-            var svgDocument = new HtmlDocument();
-
-            var uploadedAreas = new List<OfficeAreaModel>();
+            var uploadedAreas = new List<SvgModel>();
 
             foreach (var file in allTasks)
             {
-                svgDocument.LoadHtml(file);
-                var documentElement = svgDocument.DocumentNode;
+                var documentElement = HtmlDocumentHelpers.ReadHtml(file);
 
-                var nodes = documentElement.ChildNodes;
+                HtmlDocumentHelpers.LoopAllNodes(documentElement, n => n.Id = Guid.NewGuid().ToString());
 
-                foreach (var node in nodes)
-                {
-                    var uploadedGroups = new List<OfficeItemGroup>();
-                    foreach (var gGroup in node.ChildNodes)
-                    {
-                        var uploudedSvgs = new List<OfficeItemModel>();
-                        foreach (var innerNode in node.ChildNodes)
-                        {
-                            var model = new OfficeItemModel
-                            {
-                                Svg = innerNode.InnerHtml
-                            };
-
-                            uploudedSvgs.Add(model);
-                        }
-
-                        var group = new OfficeItemGroup { Items = uploudedSvgs };
-                        uploadedGroups.Add(group);
-                    }
-
-                    var (height, heightUnitRatio) = node.GetAttributeValue("height");
-                    var (width, widthUnitRatio) = node.GetAttributeValue("width");
-                    var area = new OfficeAreaModel
-                    {
-                        Size = new Size
-                        {
-                            Height = (int)Math.Round(height * heightUnitRatio, 0, MidpointRounding.AwayFromZero),
-                            Width = (int)Math.Round(width * widthUnitRatio, 0, MidpointRounding.AwayFromZero)
-                        },
-                        Groups = uploadedGroups
-                    };
+                SvgModel item = new SvgModel { Id = documentElement.Id, Html = documentElement.InnerHtml };
+                uploadedAreas.Add(item);
 
 
-                    uploadedAreas.Add(area);
-                }
-                
+                Console.WriteLine(item.Id);
+                Console.WriteLine(item.Html);
             }
 
             return uploadedAreas;

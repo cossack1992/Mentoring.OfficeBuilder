@@ -4,56 +4,23 @@
 @page "/svg"
 
 @inherits SVGBase
-
-@if (Area == null)
-{
-    <p><em>Loading...</em></p>
-}
-else
-{
     <div class="rTable">
         <div class="rTableRow">
             <div class="rTableHead"><strong>SVG</strong></div>
             <div class="rTableHead"><span style="font-weight: bold;">Uploud</span></div>
         </div>
         <div class="rTableRow">
-            <div class="rTableCell">
-                <svg width=@Area.Size.Width height=@Area.Size.Height x=@Area.Position.X y=@Area.Position.Y xmlns="http://www.w3.org/2000/svg">
-                    @foreach (var group in Area.Groups)
-                    {
-                        <g>
-                            @foreach (var model in group.Items)
-                            {
-                            <SvgRender Model=model OnClick=@(async () => await OnClick(model)) />
-                            }
-                        </g>
-                    }
-                </svg>
-            </div>
-            <div class="rTableCell">
-                <input type="file" @ref=inputTypeFileElement /><button @onclick=OnReadFile>Read file</button>
-                @if (UploudedAreas != null)
+            <input type="file" @ref=inputTypeFileElement /><button @onclick=OnReadFile>Read file</button>
+            @if (Svgs != null)
+            {
+                @foreach (var svg in Svgs)
                 {
-                    @foreach (var area in UploudedAreas)
-                    {
-
-                        <svg width=@area.Size.Height height=@area.Size.Width xmlns="http://www.w3.org/2000/svg">
-
-                            @foreach (var group in area.Groups)
-                            {
-                                <g>
-                                    @foreach (var model in group.Items)
-                                    {
-                                    <SvgRender Model=model OnClick=@(async () => await OnClick(model)) />
-                                    }
-                                </g>
-                            }
-                        </svg>
-                    }
+                    <TreeBuilder Model=svg OnClick=OnClick/>
                 }
-            </div>
+
+                <button @onclick=SaveModelsAsync>Save file</button>
+            }
         </div>
 
     </div>
-}
 
