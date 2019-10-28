@@ -24,7 +24,7 @@ namespace Mentoring.OfficeBuilder.Extensions
             {
                 "px" => 1m,
                 "pt" => 4 / 3,
-                _ => throw new InvalidOperationException()
+                _ => 1m
             };
         }
 

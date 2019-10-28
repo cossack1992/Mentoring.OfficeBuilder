@@ -8,6 +8,6 @@ namespace Mentoring.OfficeBuilder.DAL.DbModels
 
         public DbSvg Svg { get; set; }
 
-        public string ElementId {get; set;}
+        public Guid ElementId {get; set;}
     }
 }

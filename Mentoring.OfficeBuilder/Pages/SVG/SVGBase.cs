@@ -23,6 +23,8 @@ namespace Mentoring.OfficeBuilder.Pages.SVG
 
         public ElementReference inputTypeFileElement;
 
+        public List<string> SvgIds { get; set; }
+
         protected async Task OnClick(string id)
         {
             Svg = await LoadModelsAsync(id);
@@ -41,6 +43,21 @@ namespace Mentoring.OfficeBuilder.Pages.SVG
         public async Task SaveModelsAsync()
         {
             await Http.PostJsonAsync("https://localhost:44327/" + "api/Svg", Svgs);
+        }
+
+
+        protected override async Task OnInitializedAsync()
+        {
+            SvgIds = await Http.GetJsonAsync<List<string>>("https://localhost:44327/" + "api/Settings/GetSvgIds");
+        }
+
+        public async Task SvgClicked(ChangeEventArgs cityEvent)
+        {
+            var id = cityEvent.Value.ToString();
+
+            Svg = await LoadModelsAsync(id);
+
+            this.StateHasChanged();
         }
     }
 }

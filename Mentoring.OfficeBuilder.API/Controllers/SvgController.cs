@@ -24,7 +24,7 @@ namespace Mentoring.OfficeBuilder.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<SvgModel> Get(string id)
+        public async Task<SvgModel> Get(Guid id)
         {
             var dbSvg = _context.DbAreas
                 .SingleOrDefault(svg => svg.Id == id);
@@ -47,6 +47,10 @@ namespace Mentoring.OfficeBuilder.API.Controllers
         [HttpPost()]
         public async Task Post(List<SvgModel> svgs)
         {
+            _context.DbAreas.AddRange(
+                svgs.Select(x => new DAL.DbModels.DbSvg {Id=x.Id, Html = x.Html, Name = x.Name }));
+
+            await _context.SaveChangesAsync();
         }
     }
 }
