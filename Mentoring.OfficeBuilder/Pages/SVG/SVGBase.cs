@@ -33,13 +33,6 @@ namespace Mentoring.OfficeBuilder.Pages.SVG
             Svgs = await uploadService.ReadFile(inputTypeFileElement);
         }
 
-        protected override async Task OnInitializedAsync()
-        {
-            //var mainModel = await LoadModelsAsync("Main");
-
-            //Svg = mainModel;
-        }
-
         private async Task<SvgModel> LoadModelsAsync(string id)
         {
             return await Http.GetJsonAsync<SvgModel>("https://localhost:44327/" + "api/Svg/" + id);
