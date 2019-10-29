@@ -17,7 +17,7 @@ namespace Mentoring.OfficeBuilder.Pages.SVG
 
         [Inject]
         public HttpClient Http { get; set; }
-        public List<SvgModel> Svgs { get; private set; }
+        public SvgModel UploadedSvg { get; private set; }
 
         public SvgModel Svg { get; set; }
 
@@ -32,7 +32,7 @@ namespace Mentoring.OfficeBuilder.Pages.SVG
 
         protected async Task OnReadFile()
         {
-            Svgs = await uploadService.ReadFile(inputTypeFileElement);
+            UploadedSvg = (await uploadService.ReadFile(inputTypeFileElement)).Single();
         }
 
         private async Task<SvgModel> LoadModelsAsync(string id)
@@ -42,20 +42,26 @@ namespace Mentoring.OfficeBuilder.Pages.SVG
 
         public async Task SaveModelsAsync()
         {
-            await Http.PostJsonAsync("https://localhost:44327/" + "api/Svg", Svgs);
+            await Http.PostJsonAsync("https://localhost:44327/" + "api/Svg", UploadedSvg);
         }
 
 
         protected override async Task OnInitializedAsync()
         {
-            SvgIds = await Http.GetJsonAsync<List<string>>("https://localhost:44327/" + "api/Settings/GetSvgIds");
+            SvgIds = await LoadIds();
         }
 
-        public async Task SvgClicked(ChangeEventArgs cityEvent)
+        private async Task<List<string>> LoadIds()
         {
-            var id = cityEvent.Value.ToString();
+            return await Http.GetJsonAsync<List<string>>("https://localhost:44327/" + "api/Svg");
+        }
+
+        public async Task SvgClicked(ChangeEventArgs e)
+        {
+            var id = e.Value.ToString();
 
             Svg = await LoadModelsAsync(id);
+            SvgIds = await LoadIds();
 
             this.StateHasChanged();
         }

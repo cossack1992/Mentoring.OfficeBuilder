@@ -1,0 +1,17 @@
+﻿@if (SvgIds != null)
+{
+    <select class="form-control" @onchange=SvgClicked>
+        @foreach (var id in SvgIds)
+        {
+            <option value=@id>@id</option>
+        }
+    </select>
+}
+
+@code {
+    [Parameter]
+    public List<string> SvgIds { get; set; }
+
+    [Parameter]
+    public EventCallback<ChangeEventArgs> SvgClicked { get; set; }
+}

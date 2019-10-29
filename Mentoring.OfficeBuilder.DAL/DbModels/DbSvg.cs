@@ -15,5 +15,7 @@ namespace Mentoring.OfficeBuilder.DAL.DbModels
         public string Html { get; set; }
 
         public virtual List<DbTransition> Transitions { get; set; }
+
+        public bool IsActive { get; set; }
     }
 }

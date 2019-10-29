@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Mentoring.OfficeBuilder.DAL.Services;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -9,11 +10,20 @@ namespace Mentoring.OfficeBuilder.DAL.Extensions
 {
     public static class ServiceCollectionExtension
     {
-        public static IServiceCollection AddOfficeDbDbContext(this IServiceCollection services, IConfiguration configuration)
+        private static IServiceCollection AddOfficeDbDbContext(this IServiceCollection services, IConfiguration configuration)
         {
             return services.AddDbContext<OfficeDbContext>(option => 
             option.UseSqlServer(configuration.GetConnectionString("DefaultConnection"), 
             b => b.MigrationsAssembly("Mentoring.OfficeBuilder.API")));
+        }
+
+        public static IServiceCollection AddDALContext(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddOfficeDbDbContext(configuration);
+
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            return services;
         }
     }
 }

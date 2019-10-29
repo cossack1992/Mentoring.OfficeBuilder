@@ -10,21 +10,13 @@ namespace Mentoring.OfficeBuilder.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SettingsController : ControllerBase
+    public class TransitionController : ControllerBase
     {
         private OfficeDbContext _context;
 
-        public SettingsController(OfficeDbContext context)
+        public TransitionController(OfficeDbContext context)
         {
             _context = context;
-        }
-
-        [HttpGet("[action]")]
-        public async Task<List<Guid>> GetSvgIds()
-        {
-            var svgIds = _context.DbAreas.Select(x => x.Id);
-
-            return svgIds.ToList();
         }
     }
 }
