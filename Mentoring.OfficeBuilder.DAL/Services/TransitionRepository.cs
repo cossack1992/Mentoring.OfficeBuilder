@@ -1,4 +1,5 @@
 ﻿using Mentoring.OfficeBuilder.DAL.DbModels;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,29 +16,57 @@ namespace Mentoring.OfficeBuilder.DAL.Services
         {
             this.context = context;
         }
-        public Task Create(DbTransition item)
+        public void Create(DbTransition item)
         {
-            throw new NotImplementedException();
+            item.IsActive = true;
+
+            var dbSvg = this.context.DbSvgs.Single(x => x.Id == item.Svg.Id && x.IsActive);
+
+            if(dbSvg == null)
+            {
+                throw new Exception("Svg was not found");
+            }
+
+            item.Svg = dbSvg;
+            dbSvg.Transitions.Add(item);
+
+            this.context.DbTransitions.Add(item);
         }
 
-        public Task Delete(DbTransition item)
+        public void Delete(Guid id)
         {
-            throw new NotImplementedException();
+            var dbItem = this.context.DbTransitions.Find(id);
+
+            if (dbItem != null)
+            {
+                dbItem.IsActive = false;
+            }
         }
 
-        public Task<DbTransition> Get(Guid id)
+        public async Task<DbTransition> Get(Guid id)
         {
-            throw new NotImplementedException();
+            var dbItem = await this.context.DbTransitions
+                .Include(x => x.Svg)
+                .SingleOrDefaultAsync(x => x.Id == id && x.IsActive);
+
+            if (dbItem == null)
+            {
+                throw new Exception("DbTransition was not found");
+            }
+
+            return dbItem;
         }
 
-        public Task<IQueryable<DbTransition>> GetAll()
+        public IQueryable<DbTransition> GetAll()
         {
-            throw new NotImplementedException();
+            return this.context.DbTransitions
+                .Include(x => x.Svg)
+                .Where(x => x.IsActive);
         }
 
-        public Task Update(DbTransition item)
+        public void Update(DbTransition item)
         {
-            throw new NotImplementedException();
+            this.context.Entry(item).State = EntityState.Modified;
         }
     }
 }

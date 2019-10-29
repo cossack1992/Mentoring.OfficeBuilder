@@ -1,4 +1,5 @@
 ﻿using Mentoring.OfficeBuilder.DAL.DbModels;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,29 +16,47 @@ namespace Mentoring.OfficeBuilder.DAL.Services
         {
             this.context = context;
         }
-        public Task Create(DbSvg item)
+        public void Create(DbSvg item)
         {
-            throw new NotImplementedException();
+            item.IsActive = true;
+
+            this.context.DbSvgs.Add(item);
         }
 
-        public Task Delete(DbSvg item)
+        public void Delete(Guid id)
         {
-            throw new NotImplementedException();
+            var dbItem = this.context.DbSvgs.Find(id);
+
+            if(dbItem != null)
+            {
+                dbItem.IsActive = false;
+            }
         }
 
-        public Task<DbSvg> Get(Guid id)
+        public async Task<DbSvg> Get(Guid id)
         {
-            throw new NotImplementedException();
+            var dbItem = await this.context.DbSvgs
+                .Include(x => x.Transitions)
+                .SingleOrDefaultAsync(x => x.Id == id && x.IsActive);
+
+            if (dbItem == null)
+            {
+                throw new Exception("DbSvg was not found");
+            }
+
+            return dbItem;
         }
 
-        public Task<IQueryable<DbSvg>> GetAll()
+        public IQueryable<DbSvg> GetAll()
         {
-            throw new NotImplementedException();
+            return this.context.DbSvgs
+                .Include(x => x.Transitions)
+                .Where(x => x.IsActive);
         }
 
-        public Task Update(DbSvg item)
+        public void Update(DbSvg item)
         {
-            throw new NotImplementedException();
+            this.context.Entry(item).State = EntityState.Modified;
         }
     }
 }

@@ -9,15 +9,38 @@ namespace Mentoring.OfficeBuilder.DAL.Services
     public class UnitOfWork : IUnitOfWork
     {
         private readonly OfficeDbContext context;
+        private SvgRepository svgRepository;
+        private TransitionRepository transitionRepository;
 
         public UnitOfWork(OfficeDbContext context)
         {
             this.context = context;
         }
-        public IRepository<DbSvg> SvgRepository => throw new NotImplementedException();
+        public IRepository<DbSvg> SvgRepository
+        {
+            get
+            {
+                if (svgRepository == null)
+                {
+                    svgRepository = new SvgRepository(this.context);
+                }
 
-        public IRepository<DbTransition> TransitionRepository => throw new NotImplementedException();
+                return svgRepository;
+            }
+        }
 
+        public IRepository<DbTransition> TransitionRepository
+        {
+            get
+            {
+                if (transitionRepository == null)
+                {
+                    transitionRepository = new TransitionRepository(this.context);
+                }
+
+                return transitionRepository;
+            }
+        }
         public async Task SaveAsync()
         {
             await context.SaveChangesAsync();

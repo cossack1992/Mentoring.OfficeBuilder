@@ -8,6 +8,7 @@ namespace Mentoring.OfficeBuilder.DAL.DbModels
 {
     public class DbSvg
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
 
         public string Name { get; set; }

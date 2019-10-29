@@ -8,7 +8,9 @@ namespace Mentoring.OfficeBuilder.DAL
 {
     public class OfficeDbContext : DbContext
     {
-        public DbSet<DbSvg> DbAreas { get; set; }
+        public DbSet<DbSvg> DbSvgs { get; set; }
+
+        public DbSet<DbTransition> DbTransitions { get; set; }
 
         public OfficeDbContext(DbContextOptions<OfficeDbContext> options) : base(options) 
         {
