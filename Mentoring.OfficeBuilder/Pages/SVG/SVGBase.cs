@@ -43,6 +43,10 @@ namespace Mentoring.OfficeBuilder.Pages.SVG
         public async Task SaveModelsAsync()
         {
             await Http.PostJsonAsync("https://localhost:44327/" + "api/Svg", UploadedSvg);
+
+            SvgIds = await LoadIds();
+
+            this.StateHasChanged();
         }
 
 
@@ -61,7 +65,6 @@ namespace Mentoring.OfficeBuilder.Pages.SVG
             var id = e.Value.ToString();
 
             Svg = await LoadModelsAsync(id);
-            SvgIds = await LoadIds();
 
             this.StateHasChanged();
         }
