@@ -36,7 +36,6 @@ namespace Mentoring.OfficeBuilder.DAL.Services
         public async Task<DbSvg> Get(Guid id)
         {
             var dbItem = await this.context.DbSvgs
-                .Include(x => x.Transitions)
                 .SingleOrDefaultAsync(x => x.Id == id && x.IsActive);
 
             if (dbItem == null)

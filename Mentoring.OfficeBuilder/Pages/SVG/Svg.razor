@@ -9,7 +9,7 @@
         <input type="file" @ref=inputTypeFileElement /><button @onclick=OnReadFile>Read file</button>
         @if (UploadedSvg != null)
         {
-            <SvgRenderView Model=UploadedSvg OnClick=OnClick />
+            <SvgRenderView Model=UploadedSvg OnClick=OnClickAddTransaction />
 
             <button @onclick=SaveModelsAsync>Save file</button>
         }
@@ -19,7 +19,7 @@
             <Select SvgIds=@SvgIds SvgClicked=SvgClicked></Select>
         </div>
         <div>
-            <SvgRenderView Model=Svg OnClick=OnClick />
+            <SvgRenderView Model=Svg OnClick=OnClickApplyTransaction />
         </div>
     </div>
 

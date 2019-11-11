@@ -20,7 +20,9 @@ namespace Mentoring.OfficeBuilder.DAL.Services
         {
             item.IsActive = true;
 
-            var dbSvg = this.context.DbSvgs.Single(x => x.Id == item.Svg.Id && x.IsActive);
+            var dbSvg = this.context.DbSvgs
+                .Include(x => x.Transitions)
+                .Single(x => x.Id == item.Svg.Id && x.IsActive);
 
             if(dbSvg == null)
             {
@@ -47,7 +49,7 @@ namespace Mentoring.OfficeBuilder.DAL.Services
         {
             var dbItem = await this.context.DbTransitions
                 .Include(x => x.Svg)
-                .SingleOrDefaultAsync(x => x.Id == id && x.IsActive);
+                .SingleOrDefaultAsync(x => x.ElementId == id && x.IsActive);
 
             if (dbItem == null)
             {

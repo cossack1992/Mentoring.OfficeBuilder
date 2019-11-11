@@ -31,7 +31,7 @@ namespace Mentoring.OfficeBuilder.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<Transition> Get(Guid id)
+        public async Task<SvgModel> Get(Guid id)
         {
             var repository = this.unitOfWork.TransitionRepository;
             var dbTransition = await repository.Get(id);
@@ -41,11 +41,11 @@ namespace Mentoring.OfficeBuilder.API.Controllers
                 throw new Exception("Transition was not found.");
             }
 
-            var model = new Transition
+            var model = new SvgModel
             {
-                Id = dbTransition.Id,
-                ElementId = dbTransition.ElementId,
-                SvgId = dbTransition.Svg.Id
+                Id = dbTransition.Svg.Id,
+                Name = dbTransition.Svg.Name,
+                Html = dbTransition.Svg.Html
             };
 
             return model;
