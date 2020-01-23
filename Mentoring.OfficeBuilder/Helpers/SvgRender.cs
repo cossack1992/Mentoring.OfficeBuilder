@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Mentoring.OfficeBuilder.Helpers
 {
-    public class TreeBuilder : ComponentBase
+    public class SvgRender : ComponentBase
     {
         [Parameter]
         public SvgModel Model { get; set; }

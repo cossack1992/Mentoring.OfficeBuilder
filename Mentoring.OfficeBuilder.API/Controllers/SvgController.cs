@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Mentoring.OfficeBuilder.API;
 using Mentoring.OfficeBuilder.DAL.Extensions;
 using Microsoft.EntityFrameworkCore;
+using Mentoring.OfficeBuilder.DAL.Services;
 
 namespace Mentoring.OfficeBuilder.API.Controllers
 {
@@ -16,22 +17,31 @@ namespace Mentoring.OfficeBuilder.API.Controllers
     [ApiController]
     public class SvgController : ControllerBase
     {
-        private OfficeDbContext _context;
+        private IUnitOfWork unitOfWork;
 
-        public SvgController(OfficeDbContext context)
+        public SvgController(IUnitOfWork unitOfWork)
         {
-            _context = context;
+            this.unitOfWork = unitOfWork;
+        }
+
+        [HttpGet()]
+        public async Task<List<Guid>> Get()
+        {
+            var svgRepository = this.unitOfWork.SvgRepository;
+            var svgIds = svgRepository.GetAll().Select(x => x.Id);
+
+            return await svgIds.ToListAsync();
         }
 
         [HttpGet("{id}")]
         public async Task<SvgModel> Get(Guid id)
         {
-            var dbSvg = _context.DbAreas
-                .SingleOrDefault(svg => svg.Id == id);
+            var svgRepository = this.unitOfWork.SvgRepository;
+            var dbSvg = await svgRepository.Get(id);
 
             if (dbSvg == null)
             {
-                throw new Exception();
+                throw new Exception("Svg was not found.");
             }
 
             var model = new SvgModel
@@ -48,10 +58,11 @@ namespace Mentoring.OfficeBuilder.API.Controllers
         [ValidateAntiForgeryToken]
         public async Task Post(List<SvgModel> svgs)
         {
-            _context.DbAreas.AddRange(
-                svgs.Select(x => new DAL.DbModels.DbSvg {Id=x.Id, Html = x.Html, Name = x.Name }));
+            var svgRepository = this.unitOfWork.SvgRepository;
 
-            await _context.SaveChangesAsync();
+            svgRepository.Create(new DAL.DbModels.DbSvg { Html = svg.Html, Name = svg.Name });
+
+            await this.unitOfWork.SaveAsync();
         }
     }
 }

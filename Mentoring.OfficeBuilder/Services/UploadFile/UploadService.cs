@@ -41,7 +41,7 @@ namespace Mentoring.OfficeBuilder.Services.UploadFile
 
                 HtmlDocumentHelpers.LoopAllNodes(documentElement, n => n.Id = Guid.NewGuid().ToString());
 
-                SvgModel item = new SvgModel { Id = Guid.Parse(documentElement.Id), Html = documentElement.InnerHtml };
+                SvgModel item = new SvgModel { Html = documentElement.InnerHtml };
                 uploadedAreas.Add(item);
 
 

@@ -4,39 +4,23 @@
 @page "/svg"
 
 @inherits SVGBase
-<div class="rTable">
-    <div class="rTableRow">
-        <div class="rTableHead"><strong>SVG</strong></div>
-        <div class="rTableHead"><span style="font-weight: bold;">Uploud</span></div>
-    </div>
-    <div class="rTableRow">
+<div class="container ">
+    <div class="column">
         <input type="file" @ref=inputTypeFileElement /><button @onclick=OnReadFile>Read file</button>
-        @if (Svgs != null)
+        @if (UploadedSvg != null)
         {
-            @foreach (var svg in Svgs)
-            {
-                <TreeBuilder Model=svg OnClick=OnClick />
-            }
+            <SvgRenderView Model=UploadedSvg OnClick=OnClickAddTransaction />
 
             <button @onclick=SaveModelsAsync>Save file</button>
         }
     </div>
-    <div>
-        @if (SvgIds != null)
-        {
-            <select class="form-control" @onchange=SvgClicked>
-                @foreach (var id in SvgIds)
-                {
-                    <option value=@id>@id</option>
-                }
-            </select>
-        }
-    </div>
-    <div>
-        @if (Svg != null)
-        {
-            <TreeBuilder Model=Svg OnClick=OnClick />
-        }
+    <div class="column">
+        <div>
+            <Select SvgIds=@SvgIds SvgClicked=SvgClicked></Select>
+        </div>
+        <div>
+            <SvgRenderView Model=Svg OnClick=OnClickApplyTransaction />
+        </div>
     </div>
 
 </div>

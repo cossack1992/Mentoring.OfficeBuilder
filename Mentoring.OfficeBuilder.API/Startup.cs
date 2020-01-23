@@ -26,7 +26,7 @@ namespace Mentoring.OfficeBuilder.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddOfficeDbDbContext(Configuration);
+            services.AddDALContext(Configuration);
 
             services.AddCors(options =>
             {
