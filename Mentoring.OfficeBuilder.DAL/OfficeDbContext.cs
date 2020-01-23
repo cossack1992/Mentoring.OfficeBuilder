@@ -12,7 +12,6 @@ namespace Mentoring.OfficeBuilder.DAL
 
         public OfficeDbContext(DbContextOptions<OfficeDbContext> options) : base(options) 
         {
-            Database.Migrate();
         }
 
         protected override void OnModelCreating(ModelBuilder builder)

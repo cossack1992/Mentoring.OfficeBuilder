@@ -1,4 +1,5 @@
-﻿using HtmlAgilityPack;
+﻿using Ganss.XSS;
+using HtmlAgilityPack;
 using Mentoring.OfficeBuilder.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
@@ -18,6 +19,9 @@ namespace Mentoring.OfficeBuilder.Helpers
         [Parameter]
         public EventCallback<string> OnClick { get; set; }
 
+        [Inject] 
+        public IHtmlSanitizer HtmlSanitizer { get; set; }
+
         private void OnEvent(string id)
         {
             OnClick.InvokeAsync(id);
@@ -29,7 +33,7 @@ namespace Mentoring.OfficeBuilder.Helpers
         {
             base.BuildRenderTree(builder);
             int seq;
-            Node = HtmlDocumentHelpers.ReadHtml(Model.Html);
+            Node = HtmlDocumentHelpers.ReadHtml(HtmlSanitizer.Sanitize(Model.Html));
 
             foreach (var childNode in Node.ChildNodes)
             {

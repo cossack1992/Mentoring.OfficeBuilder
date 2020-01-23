@@ -45,6 +45,7 @@ namespace Mentoring.OfficeBuilder.API.Controllers
         }
 
         [HttpPost()]
+        [ValidateAntiForgeryToken]
         public async Task Post(List<SvgModel> svgs)
         {
             _context.DbAreas.AddRange(
